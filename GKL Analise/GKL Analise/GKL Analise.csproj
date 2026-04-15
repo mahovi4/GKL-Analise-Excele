@@ -185,6 +185,12 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="Date.cs" />
+    <Compile Include="Framuga.cs" />
+    <Compile Include="Columns.cs" />
+    <Compile Include="Stvorka.cs" />
+    <Compile Include="Gabaryte.cs" />
+    <Compile Include="Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
