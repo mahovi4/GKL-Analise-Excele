@@ -185,9 +185,10 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="RowsFill_1.cs" />
     <Compile Include="Date.cs" />
     <Compile Include="Framuga.cs" />
-    <Compile Include="Columns.cs" />
+    <Compile Include="ColumnsScan.cs" />
     <Compile Include="Stvorka.cs" />
     <Compile Include="Gabaryte.cs" />
     <Compile Include="Product.cs" />

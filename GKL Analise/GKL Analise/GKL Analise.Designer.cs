@@ -37,6 +37,8 @@
             this.tab1 = this.Factory.CreateRibbonTab();
             this.GKL_Analise = this.Factory.CreateRibbonGroup();
             this.bScan = this.Factory.CreateRibbonButton();
+            this.bFill1 = this.Factory.CreateRibbonButton();
+            this.bFill2 = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.GKL_Analise.SuspendLayout();
             this.SuspendLayout();
@@ -51,6 +53,8 @@
             // GKL_Analise
             // 
             this.GKL_Analise.Items.Add(this.bScan);
+            this.GKL_Analise.Items.Add(this.bFill1);
+            this.GKL_Analise.Items.Add(this.bFill2);
             this.GKL_Analise.Label = "GKL Analise";
             this.GKL_Analise.Name = "GKL_Analise";
             // 
@@ -59,6 +63,17 @@
             this.bScan.Label = "Сканировать";
             this.bScan.Name = "bScan";
             this.bScan.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.bScan_Click);
+            // 
+            // bFill1
+            // 
+            this.bFill1.Label = "Заполнить Л1";
+            this.bFill1.Name = "bFill1";
+            this.bFill1.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.bFill1_Click);
+            // 
+            // bFill2
+            // 
+            this.bFill2.Label = "Заполнить Л2";
+            this.bFill2.Name = "bFill2";
             // 
             // Ribbon1
             // 
@@ -79,6 +94,8 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonTab tab1;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup GKL_Analise;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton bScan;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton bFill1;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton bFill2;
     }
 
     partial class ThisRibbonCollection

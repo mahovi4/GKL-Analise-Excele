@@ -12,10 +12,17 @@ namespace GKL_Analise
 
         public int Virez { get; }
 
+        public Gabaryte Gabaryte { get; private set; }
+
         public Framuga(int square, int virez)
         {
             Square = square;
             Virez = virez;
+        }
+
+        public void SetGabaryte(Gabaryte gabaryte)
+        {
+            Gabaryte = gabaryte;
         }
     }
 }

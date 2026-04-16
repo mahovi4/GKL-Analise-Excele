@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Office.Interop.Excel;
+using System.Windows.Forms;
 
 namespace GKL_Analise
 {
@@ -13,6 +14,11 @@ namespace GKL_Analise
         Excel.Application eApp;
 
         List<Date> dates = new List<Date>();
+
+        int AllProductsCount = 0;
+
+        Dictionary<int, int> AllHeights = new Dictionary<int, int>();
+        Dictionary<int, int> AllWidths = new Dictionary<int, int>();
 
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
@@ -26,7 +32,7 @@ namespace GKL_Analise
             var visRange = sheet.UsedRange.Offset[1, 0].SpecialCells(XlCellType.xlCellTypeVisible);
 
             var wMonth = 0;
-            var date = new Date(0, 0);
+            Date date = null;
 
             foreach (Range row in visRange.Rows)
             {
@@ -34,63 +40,51 @@ namespace GKL_Analise
 
                 if (rowNum == 1) continue;
 
-                if(sheet.Cells[rowNum, (int)Columns.Год] == "") return;
+                var ch = sheet.Cells[rowNum, (int)ColumnsScan.Год].Value;
+                if (ch == null) 
+                {
+                    dates.Add(date);
 
-                if (!int.TryParse(sheet.Cells[rowNum, (int)Columns.Год].Value, out int year))
-                    throw new Exception();
+                    break;
+                }
 
-                if (!int.TryParse(sheet.Cells[rowNum, (int)Columns.Месяц].Value, out int month))
-                    throw new Exception();
+                var year = (int)sheet.Cells[rowNum, (int)ColumnsScan.Год].Value;
 
-                var prodName = (string)sheet.Cells[rowNum, (int)Columns.Продукция].Value;
+                var month = (int)sheet.Cells[rowNum, (int)ColumnsScan.Месяц].Value;
 
-                if (!int.TryParse(sheet.Cells[rowNum, (int)Columns.ВысотаИзделия].Value, out int height))
-                    throw new Exception();
+                var prodName = (string)sheet.Cells[rowNum, (int)ColumnsScan.Продукция].Value;
 
-                if (!int.TryParse(sheet.Cells[rowNum, (int)Columns.ШиринаИзделия].Value, out int width))
-                    throw new Exception();
+                var height = (int)sheet.Cells[rowNum, (int)ColumnsScan.ВысотаИзделия].Value;
 
-                if(!int.TryParse(sheet.Cells[rowNum, (int)Columns.ВАС].Value, out int has))
-                    throw new Exception();
+                var width = (int)sheet.Cells[rowNum, (int)ColumnsScan.ШиринаИзделия].Value;
 
-                if(!int.TryParse(sheet.Cells[rowNum, (int)Columns.ШАС].Value, out int was))
-                    throw new Exception();
+                var has = (int)sheet.Cells[rowNum, (int)ColumnsScan.ВАС].Value;
 
-                if(!int.TryParse(sheet.Cells[rowNum, (int)Columns.ВПС].Value, out int hps))
-                    throw new Exception();
+                var was = (int)sheet.Cells[rowNum, (int)ColumnsScan.ШАС].Value;
 
-                if(!int.TryParse(sheet.Cells[rowNum, (int)Columns.ШПС].Value, out int wps))
-                    throw new Exception();
+                var hps = (int)sheet.Cells[rowNum, (int)ColumnsScan.ВПС].Value;
 
-                if(!int.TryParse(sheet.Cells[rowNum, (int)Columns.Количество].Value, out int count))
-                    throw new Exception();
+                var wps = (int)sheet.Cells[rowNum, (int)ColumnsScan.ШПС].Value;
 
-                if(!int.TryParse(sheet.Cells[rowNum, (int)Columns.Сложность].Value, out int complexity))
-                    throw new Exception();
+                var count = (int)sheet.Cells[rowNum, (int)ColumnsScan.Количество].Value;
 
-                if(!int.TryParse(sheet.Cells[rowNum, (int)Columns.ПлощадьФрамуги].Value, out int sqFram))
-                    throw new Exception();
+                var complexity = (int)sheet.Cells[rowNum, (int)ColumnsScan.Сложность].Value;
 
-                if(!int.TryParse(sheet.Cells[rowNum, (int)Columns.ПлощадьЛевойБоковойВставки].Value, out int sqLVs))
-                    throw new Exception();
+                var sqFram = (int)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьФрамуги].Value;
 
-                if(!int.TryParse(sheet.Cells[rowNum, (int)Columns.ПлощадьПравойБоковойВставки].Value, out int sqRVs))
-                    throw new Exception();
+                var sqLVs = (int)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьЛевойБоковойВставки].Value;
 
-                if(!int.TryParse(sheet.Cells[rowNum, (int)Columns.ПлощадьВырезовРабочейСтворки].Value, out int sqVAS))
-                    throw new Exception();
+                var sqRVs = (int)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьПравойБоковойВставки].Value;
 
-                if(!int.TryParse(sheet.Cells[rowNum, (int)Columns.ПлощадьВырезовПассивнойСтворки].Value, out int sqVPS))
-                    throw new Exception();
+                var sqVAS = (int)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьВырезовРабочейСтворки].Value;
 
-                if(!int.TryParse(sheet.Cells[rowNum, (int)Columns.ПлощадьВырезовФрамуги].Value, out int sqVFr))
-                    throw new Exception();
+                var sqVPS = (int)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьВырезовПассивнойСтворки].Value;
 
-                if(!int.TryParse(sheet.Cells[rowNum, (int)Columns.ПлощадьВырезовЛевойБоковойВставки].Value, out int sqVLVs))
-                    throw new Exception();
+                var sqVFr = (int)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьВырезовФрамуги].Value;
 
-                if(!int.TryParse(sheet.Cells[rowNum, (int)Columns.ПлощадьВырезовПравойБоковойВставки].Value, out int sqVRVs))
-                    throw new Exception();
+                var sqVLVs = (int)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьВырезовЛевойБоковойВставки].Value;
+
+                var sqVRVs = (int)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьВырезовПравойБоковойВставки].Value;
 
                 var pGab = new Gabaryte(height, width);
 
@@ -122,9 +116,121 @@ namespace GKL_Analise
                 }
                 else
                 {
-                    
+                    if(date != null)
+                        dates.Add(date);
+
+                    date = new Date(year, month);
+                    date.Products.Add(new Product(prodName, pGab, complexity, act, pas, fr, lv, rv), count);
+
+                    wMonth = month;
                 }
             }
+
+            var b = false;
+
+            foreach (var d in dates)
+                foreach (var p in d.Products)
+                {
+                    AllProductsCount += p.Value;
+
+                    foreach(var h in AllHeights)
+                    {
+                        b = false;
+                        if(h.Key == p.Key.Gabaryte.Height)
+                        {
+                            AllHeights[h.Key] += p.Value;
+                            b = true;
+                        }
+                    }
+
+                    if (!b) AllHeights.Add(p.Key.Gabaryte.Height, p.Value);
+                    
+                    foreach(var w in AllWidths)
+                    {
+                        b = false;
+                        if(w.Key == p.Key.Gabaryte.Width)
+                        {
+                            AllWidths[w.Key] += p.Value;
+                            b = true;
+                        }
+                    }
+
+                    if (!b) AllWidths.Add(p.Key.Gabaryte.Width, p.Value);
+                }
+
+            MessageBox.Show($"Готово\nВсего {AllProductsCount} изделий");
+        }
+
+        private void bFill1_Click(object sender, RibbonControlEventArgs e)
+        {
+
+        }
+
+        private Gabaryte GetMin()
+        {
+            var h = 0;
+            var w = 0;
+
+            foreach (var height in AllHeights)
+            {
+                if (h == 0)
+                    h = height.Key;
+                else if (h > height.Key)
+                    h = height.Key;
+            }
+
+            foreach(var width in AllWidths)
+            { 
+
+                if (w == 0)
+                    w = width.Key;
+                else if (w > width.Key)
+                    w = width.Key;
+            }
+
+            return new Gabaryte(h, w);
+        }
+
+        private Gabaryte GetMax()
+        {
+            var h = 0;
+            var w = 0;
+
+            foreach (var d in dates)
+                foreach (var p in d.Products)
+                {
+                    if (h == 0)
+                        h = p.Key.Gabaryte.Height;
+                    else if (h < p.Key.Gabaryte.Height)
+                        h = p.Key.Gabaryte.Height;
+
+                    if (w == 0)
+                        w = p.Key.Gabaryte.Width;
+                    else if (w < p.Key.Gabaryte.Width)
+                        w = p.Key.Gabaryte.Width;
+                }
+
+            return new Gabaryte(h, w);
+        }
+
+        private Gabaryte GetMid()
+        {
+            var min = GetMin();
+            var max = GetMax();
+
+            return new Gabaryte((min.Height + max.Height)/2, (min.Width + max.Height)/2);
+        }
+
+        private Gabaryte GetModa()
+        {
+            var allWidth = new Dictionary<int, int>();
+            var allHeight = new Dictionary<int, int>();
+
+            foreach(var d in dates)
+                foreach(var p in d.Products)
+                {
+                    foreach(var h in allHeight)
+                }
         }
     }
 }

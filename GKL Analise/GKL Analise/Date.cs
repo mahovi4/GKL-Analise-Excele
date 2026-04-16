@@ -18,6 +18,8 @@ namespace GKL_Analise
         {
             Year = year;
             Month = month;
+
+            Products = new Dictionary<Product, int>();
         }
     }
 }

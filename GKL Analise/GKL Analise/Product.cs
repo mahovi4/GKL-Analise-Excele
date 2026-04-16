@@ -34,6 +34,18 @@ namespace GKL_Analise
             Framuga = framuga;
             LeftVstavka = leftVstavka;
             RightVstavka = rightVstavka;
+
+            LeftVstavka?.SetGabaryte(new Gabaryte(Gabaryte.Height, LeftVstavka.Square * 1000000 / Gabaryte.Height));
+
+            RightVstavka?.SetGabaryte(new Gabaryte(Gabaryte.Height, RightVstavka.Square * 1000000 / Gabaryte.Height));
+
+            if(Framuga != null)
+            {
+                var w = Gabaryte.Width 
+                    + (LeftVstavka != null ? LeftVstavka.Gabaryte.Width : 0) 
+                    + (RightVstavka != null ? RightVstavka.Gabaryte.Width : 0);
+                Framuga.SetGabaryte(new Gabaryte(Framuga.Square * 1000000 / w, w));
+            }
         }
     }
 }

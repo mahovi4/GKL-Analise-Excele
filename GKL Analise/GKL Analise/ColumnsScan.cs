@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GKL_Analise
 {
-    internal enum Columns
+    internal enum ColumnsScan
     {
         Нет,
         Год,
