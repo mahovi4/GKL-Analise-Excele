@@ -10,7 +10,7 @@ namespace GKL_Analise
     {
         public string Name { get; }
 
-        public Gabaryte Gabaryte { get; }
+        public Gabaryte Gabaryte { get; private set; }
 
         public int Complexity { get; }
 
@@ -85,6 +85,11 @@ namespace GKL_Analise
                 if (!product.RightVstavka.Equals(RightVstavka)) return false;
 
             return true;
+        }
+
+        public void setGabaryte(Gabaryte gabaryte)
+        {
+            Gabaryte = gabaryte;
         }
     }
 }

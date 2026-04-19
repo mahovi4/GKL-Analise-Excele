@@ -45,5 +45,10 @@ namespace GKL_Analise
 
             return framuga.Gabaryte.Equals(Gabaryte) && framuga.VirezSq == VirezSq;
         }
+
+        public void setGabaryte(Gabaryte gabaryte)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

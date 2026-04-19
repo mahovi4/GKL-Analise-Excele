@@ -11,5 +11,7 @@ namespace GKL_Analise
         string Name { get; }
 
         Gabaryte Gabaryte { get; }
+
+        void setGabaryte(Gabaryte gabaryte);
     }
 }

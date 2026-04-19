@@ -79,6 +79,21 @@ namespace GKL_Analise
 
             return dic;
         }
+        public static Dictionary<IConstruction, int> ReversDics(this Dictionary<IConstruction, int> dic)
+        {
+            var h = 0;
+            var w = 0;
+            var res = new Dictionary<IConstruction, int>();
+
+            foreach(var d in dic)
+            {
+                var el = d.Key;
+                el.setGabaryte(new Gabaryte(d.Key.Gabaryte.Width, d.Key.Gabaryte.Height));
+                res.Add(el, d.Value);
+            }
+
+            return res;
+        }
 
         public static Dictionary<IConstruction, int> GetAllConctruction(this IEnumerable<Date> dates, EConstructionClass cclass)
         {

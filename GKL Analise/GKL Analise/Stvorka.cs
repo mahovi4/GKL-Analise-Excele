@@ -11,7 +11,7 @@ namespace GKL_Analise
     {
         public string Name { get; }
 
-        public Gabaryte Gabaryte { get; }
+        public Gabaryte Gabaryte { get; private set; }
 
         public int VirezSq { get; }
 
@@ -49,6 +49,11 @@ namespace GKL_Analise
             if (!(obj is Stvorka stvorka)) return false;
 
             return stvorka.Gabaryte.Equals(this.Gabaryte) && stvorka.VirezSq == VirezSq;
+        }
+
+        public void setGabaryte(Gabaryte gabaryte)
+        {
+            Gabaryte = gabaryte;
         }
     }
 }

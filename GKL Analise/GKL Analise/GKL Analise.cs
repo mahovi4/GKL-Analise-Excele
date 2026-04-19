@@ -293,7 +293,69 @@ namespace GKL_Analise
                 row++;
             }
 
-            MessageBox.Show($"Готово");
+            row++; 
+            row++;
+
+            sheet.Cells[row, 1].Value = "Фрамуги";
+            row++;
+            sheet.Cells[row, 1].Value = "Ширина";
+            row++;
+            sheet.Cells[row, 1].Value = "Интервал, мм";
+            sheet.Cells[row, 2].Value = "Количество створок, шт";
+            sheet.Cells[row, 3].Value = "Доля, %";
+            row++;
+
+            d1 = dates.GetAllConctruction(EConstructionClass.LVstavka);
+            d2 = dates.GetAllConctruction(EConstructionClass.RVstavka);
+            var d3 = dates.GetAllConctruction(EConstructionClass.Framuga);
+
+            var d4 = d3.ReversDics();
+
+            dic = d1.SumDics(d2);
+            var dic1 = dic.SumDics(d4);
+
+            diapH = dic1.GetDiapHeights();
+            countH = diapH.GetCount();
+
+            diapW = dic1.GetDiapWidth();
+            countW = diapW.GetCount();
+
+            foreach (var dw in diapW)
+            {
+                var dol = (double)dw.Value * 100 / countW;
+
+                sheet.Cells[row, 1].Value = dw.Key;
+                sheet.Cells[row, 2].Value = dw.Value;
+                sheet.Cells[row, 3].Value = dol;
+
+                row++;
+            }
+
+            row++;
+            row++;
+
+            sheet.Cells[row, 1].Value = "Высота";
+
+            row++;
+
+            sheet.Cells[row, 1].Value = "Интервал, мм";
+            sheet.Cells[row, 2].Value = "Количество створок, шт";
+            sheet.Cells[row, 3].Value = "Доля, %";
+
+            row++;
+
+            foreach (var dh in diapH)
+            {
+                var dol = (double)dh.Value * 100 / countH;
+
+                sheet.Cells[row, 1].Value = dh.Key;
+                sheet.Cells[row, 2].Value = dh.Value;
+                sheet.Cells[row, 3].Value = dol;
+
+                row++;
+            }
+
+                MessageBox.Show($"Готово");
         }
     }
 }
