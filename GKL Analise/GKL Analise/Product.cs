@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GKL_Analise
 {
-    internal class Product
+    internal class Product : IConstruction
     {
         public string Name { get; }
 
@@ -18,13 +18,13 @@ namespace GKL_Analise
 
         public Stvorka Passive { get; }
 
-        public Framuga Framuga { get; }
+        public Stvorka Framuga { get; }
 
-        public Framuga LeftVstavka { get; }
+        public Stvorka LeftVstavka { get; }
 
-        public Framuga RightVstavka { get; }
+        public Stvorka RightVstavka { get; }
 
-        public Product(string name, Gabaryte gabaryte, int complexity, Stvorka active, Stvorka passive, Framuga framuga, Framuga leftVstavka, Framuga rightVstavka)
+        public Product(string name, Gabaryte gabaryte, int complexity, Stvorka active, Stvorka passive, Stvorka framuga, Stvorka leftVstavka, Stvorka rightVstavka)
         {
             Name = name;
             Gabaryte = gabaryte;
@@ -34,18 +34,57 @@ namespace GKL_Analise
             Framuga = framuga;
             LeftVstavka = leftVstavka;
             RightVstavka = rightVstavka;
+        }
 
-            LeftVstavka?.SetGabaryte(new Gabaryte(Gabaryte.Height, LeftVstavka.Square * 1000000 / Gabaryte.Height));
+        public bool IsPassiv => Passive != null;
+        public bool IsFramuga => Framuga != null;
+        public bool IsLeftVstavka => LeftVstavka != null;
+        public bool IsRightVstavka => RightVstavka != null;
 
-            RightVstavka?.SetGabaryte(new Gabaryte(Gabaryte.Height, RightVstavka.Square * 1000000 / Gabaryte.Height));
 
-            if(Framuga != null)
-            {
-                var w = Gabaryte.Width 
-                    + (LeftVstavka != null ? LeftVstavka.Gabaryte.Width : 0) 
-                    + (RightVstavka != null ? RightVstavka.Gabaryte.Width : 0);
-                Framuga.SetGabaryte(new Gabaryte(Framuga.Square * 1000000 / w, w));
-            }
+        public bool IsEqualConctruction(IConstruction construction)
+        {
+            if(!construction.Gabaryte.Equals(Gabaryte)) return false;
+
+            return true;
+        }
+
+        public override string ToString()
+        {
+            return $"{Name}({Gabaryte.ToString()})";
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if(!(obj is Product product)) return false;
+
+            if(!product.Name.Equals(Name)) return false;
+            if(!product.Gabaryte.Equals(Gabaryte)) return false;
+            if(product.Complexity != Complexity) return false;
+            if(!product.Active.Equals(Active)) return false;
+
+            if(product.IsPassiv != IsPassiv) return false;
+            if((product.IsPassiv && IsPassiv))
+                if(!product.Passive.Equals(Passive)) return false;
+
+            if(product.IsFramuga != IsFramuga) return false;
+            if ((product.IsFramuga && IsFramuga))
+                if (!product.IsFramuga.Equals(IsFramuga)) return false;
+
+            if (product.IsLeftVstavka != IsLeftVstavka) return false;
+            if ((product.IsLeftVstavka && IsLeftVstavka))
+                if (!product.IsLeftVstavka.Equals(IsLeftVstavka)) return false;
+
+            if (product.IsRightVstavka != IsRightVstavka) return false;
+            if ((product.IsRightVstavka && IsRightVstavka))
+                if (!product.RightVstavka.Equals(RightVstavka)) return false;
+
+            return true;
         }
     }
 }

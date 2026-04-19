@@ -74,6 +74,7 @@
             // 
             this.bFill2.Label = "Заполнить Л2";
             this.bFill2.Name = "bFill2";
+            this.bFill2.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.bFill2_Click);
             // 
             // Ribbon1
             // 

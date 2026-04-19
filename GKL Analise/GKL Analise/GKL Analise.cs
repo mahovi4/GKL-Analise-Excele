@@ -15,11 +15,6 @@ namespace GKL_Analise
 
         List<Date> dates = new List<Date>();
 
-        int AllProductsCount = 0;
-
-        Dictionary<int, int> AllHeights = new Dictionary<int, int>();
-        Dictionary<int, int> AllWidths = new Dictionary<int, int>();
-
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
             eApp = Globals.ThisAddIn.Application;
@@ -88,27 +83,29 @@ namespace GKL_Analise
 
                 var pGab = new Gabaryte(height, width);
 
-                var act = new Stvorka(new Gabaryte(has, was), sqVAS);
+                var act = new Stvorka("Активная створка", new Gabaryte(has, was), sqVAS);
 
                 Stvorka pas = null;
 
-                Framuga fr = null;
+                Stvorka fr = null;
 
-                Framuga lv = null;
+                Stvorka lv = null;
 
-                Framuga rv = null;
+                Stvorka rv = null;
 
                 if (hps > 0)
-                    pas = new Stvorka(new Gabaryte(hps, wps), sqVFr);
-
-                if (sqFram > 0)
-                    fr = new Framuga(sqFram, sqVFr);
+                    pas = new Stvorka("Пассивная створка", new Gabaryte(hps, wps), sqVFr);
 
                 if (sqLVs > 0)
-                    lv = new Framuga(sqLVs, sqVLVs);
+                    lv = new Stvorka("Левая вставка", sqLVs, EGabaryteDirection.Height, height, sqVLVs);
 
                 if (sqRVs > 0)
-                    rv = new Framuga(sqRVs, sqVRVs);
+                    rv = new Stvorka("Правая вставка", sqLVs, EGabaryteDirection.Height, height, sqVRVs);
+
+                if (sqFram > 0)
+                    fr = new Stvorka("Фрамуга", sqLVs, EGabaryteDirection.Width, 
+                        width + (lv != null ? lv.Gabaryte.Width : 0) + (rv != null ? rv.Gabaryte.Width : 0), 
+                        sqVFr);
 
                 if(wMonth == month)
                 {
@@ -126,111 +123,177 @@ namespace GKL_Analise
                 }
             }
 
-            var b = false;
-
-            foreach (var d in dates)
-                foreach (var p in d.Products)
-                {
-                    AllProductsCount += p.Value;
-
-                    foreach(var h in AllHeights)
-                    {
-                        b = false;
-                        if(h.Key == p.Key.Gabaryte.Height)
-                        {
-                            AllHeights[h.Key] += p.Value;
-                            b = true;
-                        }
-                    }
-
-                    if (!b) AllHeights.Add(p.Key.Gabaryte.Height, p.Value);
-                    
-                    foreach(var w in AllWidths)
-                    {
-                        b = false;
-                        if(w.Key == p.Key.Gabaryte.Width)
-                        {
-                            AllWidths[w.Key] += p.Value;
-                            b = true;
-                        }
-                    }
-
-                    if (!b) AllWidths.Add(p.Key.Gabaryte.Width, p.Value);
-                }
-
-            MessageBox.Show($"Готово\nВсего {AllProductsCount} изделий");
+            MessageBox.Show($"Готово\nВсего {dates.AllConstructionCount(EConstructionClass.Product)} изделий");
         }
 
         private void bFill1_Click(object sender, RibbonControlEventArgs e)
         {
+            var sheet = (_Worksheet)eApp.ActiveSheet;
 
+            var d1 = dates.GetAllConctruction(EConstructionClass.Aktiv);
+            var d2 = dates.GetAllConctruction(EConstructionClass.Passiv);
+
+            var dic = d1.SumDics(d2);
+
+            var min = dic.GetMinConstruction();
+            var max = dic.GetMaxConstruction();
+            var mid = dic.GetMidConstruction();
+            var mod = dic.GetModaConstruction();
+            var m75 = (List<Gabaryte>)dic.Get75Construction();
+
+            sheet.Cells[3, 2].Value = min.Width;
+            sheet.Cells[3, 3].Value = min.Height;
+
+            sheet.Cells[4, 2].Value = max.Width;
+            sheet.Cells[4, 3].Value = max.Height;
+
+            sheet.Cells[5, 2].Value = mid.Width;
+            sheet.Cells[5, 3].Value = mid.Height;
+
+            sheet.Cells[6, 2].Value = mod.Width;
+            sheet.Cells[6, 3].Value = mod.Height;
+
+            sheet.Cells[7, 2].Value = $"{m75[0].Width}-{m75[1].Width}";
+            sheet.Cells[7, 3].Value = $"{m75[0].Height}-{m75[1].Height}";
+
+            d1 = dates.GetAllConctruction(EConstructionClass.Aktiv);
+
+            min = d1.GetMinConstruction();
+            max = d1.GetMaxConstruction();
+            mid = d1.GetMidConstruction();
+            mod = d1.GetModaConstruction();
+            m75 = (List<Gabaryte>)d1.Get75Construction();
+
+            sheet.Cells[11, 2].Value = min.Width;
+            sheet.Cells[11, 3].Value = min.Height;
+
+            sheet.Cells[12, 2].Value = max.Width;
+            sheet.Cells[12, 3].Value = max.Height;
+
+            sheet.Cells[13, 2].Value = mid.Width;
+            sheet.Cells[13, 3].Value = mid.Height;
+
+            sheet.Cells[14, 2].Value = mod.Width;
+            sheet.Cells[14, 3].Value = mod.Height;
+
+            sheet.Cells[15, 2].Value = $"{m75[0].Width}-{m75[1].Width}";
+            sheet.Cells[15, 3].Value = $"{m75[0].Height}-{m75[1].Height}";
+
+            d1 = dates.GetAllConctruction(EConstructionClass.LVstavka);
+            d2 = dates.GetAllConctruction(EConstructionClass.RVstavka);
+
+            dic = d1.SumDics(d2);
+
+            min = dic.GetMinConstruction();
+            max = dic.GetMaxConstruction();
+            mid = dic.GetMidConstruction();
+            mod = dic.GetModaConstruction();
+            m75 = (List<Gabaryte>)dic.Get75Construction();
+
+            sheet.Cells[19, 2].Value = min.Width;
+            sheet.Cells[19, 3].Value = min.Height;
+
+            sheet.Cells[20, 2].Value = max.Width;
+            sheet.Cells[20, 3].Value = max.Height;
+
+            sheet.Cells[21, 2].Value = mid.Width;
+            sheet.Cells[21, 3].Value = mid.Height;
+
+            sheet.Cells[22, 2].Value = mod.Width;
+            sheet.Cells[22, 3].Value = mod.Height;
+
+            sheet.Cells[23, 2].Value = $"{m75[0].Width}-{m75[1].Width}";
+            sheet.Cells[23, 3].Value = $"{m75[0].Height}-{m75[1].Height}";
+
+            dic = dates.GetAllConctruction(EConstructionClass.Framuga);
+
+            min = dic.GetMinConstruction();
+            max = dic.GetMaxConstruction();
+            mid = dic.GetMidConstruction();
+            mod = dic.GetModaConstruction();
+            m75 = (List<Gabaryte>)dic.Get75Construction();
+
+            sheet.Cells[27, 14].Value = min.Width;
+            sheet.Cells[27, 15].Value = min.Height;
+
+            sheet.Cells[28, 14].Value = max.Width;
+            sheet.Cells[28, 15].Value = max.Height;
+
+            sheet.Cells[29, 14].Value = mid.Width;
+            sheet.Cells[29, 15].Value = mid.Height;
+
+            sheet.Cells[30, 14].Value = mod.Width;
+            sheet.Cells[30, 15].Value = mod.Height;
+
+            sheet.Cells[31, 14].Value = $"{m75[0].Width}-{m75[1].Width}";
+            sheet.Cells[31, 15].Value = $"{m75[0].Height}-{m75[1].Height}";
+
+            MessageBox.Show($"Готово");
         }
 
-        private Gabaryte GetMin()
+        private void bFill2_Click(object sender, RibbonControlEventArgs e)
         {
-            var h = 0;
-            var w = 0;
+            var sheet = (_Worksheet)eApp.ActiveSheet;
 
-            foreach (var height in AllHeights)
+            var d1 = dates.GetAllConctruction(EConstructionClass.Aktiv);
+            var d2 = dates.GetAllConctruction(EConstructionClass.Passiv);
+
+            var dic = d1.SumDics(d2);
+
+            var diapH = dic.GetDiapHeights();
+            var countH = diapH.GetCount();
+
+            var diapW = dic.GetDiapWidth();
+            var countW = diapW.GetCount();
+
+            var row = 1;
+
+            sheet.Cells[row, 1].Value = "Створки";
+            row++;
+            sheet.Cells[row, 1].Value = "Ширина";
+            row++;
+            sheet.Cells[row, 1].Value = "Интервал, мм";
+            sheet.Cells[row, 2].Value = "Количество створок, шт";
+            sheet.Cells[row, 3].Value = "Доля, %";
+
+            row++;
+
+            foreach (var dw in diapW) 
             {
-                if (h == 0)
-                    h = height.Key;
-                else if (h > height.Key)
-                    h = height.Key;
+                var dol = (double)dw.Value * 100 / countW;
+
+                sheet.Cells[row, 1].Value = dw.Key;
+                sheet.Cells[row, 2].Value = dw.Value;
+                sheet.Cells[row, 3].Value = dol;
+
+                row++;
             }
 
-            foreach(var width in AllWidths)
-            { 
+            row++;
+            row++;
 
-                if (w == 0)
-                    w = width.Key;
-                else if (w > width.Key)
-                    w = width.Key;
+            sheet.Cells[row, 1].Value = "Высота";
+
+            row++;
+
+            sheet.Cells[row, 1].Value = "Интервал, мм";
+            sheet.Cells[row, 2].Value = "Количество створок, шт";
+            sheet.Cells[row, 3].Value = "Доля, %";
+
+            row++;
+
+            foreach (var dh in diapH)
+            {
+                var dol = (double)dh.Value * 100 / countH;
+
+                sheet.Cells[row, 1].Value = dh.Key;
+                sheet.Cells[row, 2].Value = dh.Value;
+                sheet.Cells[row, 3].Value = dol;
+
+                row++;
             }
 
-            return new Gabaryte(h, w);
-        }
-
-        private Gabaryte GetMax()
-        {
-            var h = 0;
-            var w = 0;
-
-            foreach (var d in dates)
-                foreach (var p in d.Products)
-                {
-                    if (h == 0)
-                        h = p.Key.Gabaryte.Height;
-                    else if (h < p.Key.Gabaryte.Height)
-                        h = p.Key.Gabaryte.Height;
-
-                    if (w == 0)
-                        w = p.Key.Gabaryte.Width;
-                    else if (w < p.Key.Gabaryte.Width)
-                        w = p.Key.Gabaryte.Width;
-                }
-
-            return new Gabaryte(h, w);
-        }
-
-        private Gabaryte GetMid()
-        {
-            var min = GetMin();
-            var max = GetMax();
-
-            return new Gabaryte((min.Height + max.Height)/2, (min.Width + max.Height)/2);
-        }
-
-        private Gabaryte GetModa()
-        {
-            var allWidth = new Dictionary<int, int>();
-            var allHeight = new Dictionary<int, int>();
-
-            foreach(var d in dates)
-                foreach(var p in d.Products)
-                {
-                    foreach(var h in allHeight)
-                }
+            MessageBox.Show($"Готово");
         }
     }
 }

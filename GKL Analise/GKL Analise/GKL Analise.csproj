@@ -185,6 +185,11 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="EConstructionClass.cs" />
+    <Compile Include="EGabaryteDirection.cs" />
+    <Compile Include="IConstruction.cs" />
+    <Compile Include="IPolotno.cs" />
+    <Compile Include="Sorter.cs" />
     <Compile Include="RowsFill_1.cs" />
     <Compile Include="Date.cs" />
     <Compile Include="Framuga.cs" />

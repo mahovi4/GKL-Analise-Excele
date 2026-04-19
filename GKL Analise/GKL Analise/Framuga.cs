@@ -6,23 +6,44 @@ using System.Threading.Tasks;
 
 namespace GKL_Analise
 {
-    internal class Framuga
+    internal class Framuga : IConstruction, IPolotno
     {
+        public string Name { get; }
+
         public int Square { get; }
 
-        public int Virez { get; }
+        public int VirezSq { get; }
 
         public Gabaryte Gabaryte { get; private set; }
 
-        public Framuga(int square, int virez)
+
+        public Framuga(string name, int square, int virez)
         {
+            Name = name;
             Square = square;
-            Virez = virez;
+            VirezSq = virez;
         }
 
         public void SetGabaryte(Gabaryte gabaryte)
         {
             Gabaryte = gabaryte;
+        }
+
+        public override string ToString()
+        {
+            return $"{Gabaryte} [{VirezSq}]";
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode() + Gabaryte.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if(!(obj is Framuga framuga)) return false;
+
+            return framuga.Gabaryte.Equals(Gabaryte) && framuga.VirezSq == VirezSq;
         }
     }
 }
