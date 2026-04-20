@@ -353,9 +353,9 @@ namespace GKL_Analise
                 sheet.Cells[row, 3].Value = dol;
 
                 row++;
-            }
+            } 
 
-                MessageBox.Show($"Готово");
+            MessageBox.Show($"Готово");
         }
     }
 }

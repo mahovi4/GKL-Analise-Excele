@@ -101,12 +101,8 @@ namespace GKL_Analise
 
             var constructions = new Dictionary<IConstruction, int>();
 
-            var b = false;
-
             foreach (var product in products) 
             {
-                b= false;
-
                 var c = product.Key.GetConstruction(cclass);
 
                 if (c == null) continue;
@@ -128,12 +124,7 @@ namespace GKL_Analise
         }
         public static int AllConstructionCount(this Dictionary<IConstruction, int> constructions)
         {
-            int count = 0;
-
-            foreach (var con in constructions)
-                count += con.Value;
-
-            return count;
+            return constructions.Sum(con => con.Value);
         }
 
         public static Dictionary<int, int> GetAllHeightsConstruction(this Dictionary<IConstruction, int> constructions)
@@ -367,7 +358,7 @@ namespace GKL_Analise
                 .OrderByDescending(kvp => kvp.Value)
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
-            var count = constructions.AllConstructionCount();
+            var count = allH.Sum(kvp => kvp.Value);
 
             var listH = new List<int>();
             var listW = new List<int>();
@@ -592,6 +583,10 @@ namespace GKL_Analise
                 count += d.Value;
 
             return count;
+        }
+        public static int GetCount(this Dictionary<int, int> dic)
+        {
+            return dic.Sum(d => d.Value);
         }
     }
 }
