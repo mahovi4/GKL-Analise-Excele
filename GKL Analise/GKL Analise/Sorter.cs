@@ -358,27 +358,32 @@ namespace GKL_Analise
                 .OrderByDescending(kvp => kvp.Value)
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
-            var count = allH.Sum(kvp => kvp.Value);
+            var countH = allH.Sum(kvp => kvp.Value);
+            var countW = allW.Sum(kvp => kvp.Value);
 
             var listH = new List<int>();
             var listW = new List<int>();
 
             var perc = 0.0;
+            var count = 0.0;
 
             foreach (var h in allH)
             {
-                perc += h.Value * 100 / count;
+                perc = (double)h.Value * 100 / (double)countH;
+                count += perc;
                 listH.Add(h.Key);
-                if (perc >= 75) break;
+                if (count >= 75) break;
             }
 
             perc = 0.0;
+            count = 0.0;
 
             foreach (var w in allW)
             {
-                perc += w.Value * 100 / count;
+                perc = (double)w.Value * 100 / (double)countW;
+                count += perc;
                 listW.Add(w.Key);
-                if (perc >= 75) break;
+                if (count >= 75) break;
             }
 
             listH.Sort();

@@ -135,6 +135,27 @@ namespace GKL_Analise
 
             var dic = d1.SumDics(d2);
 
+            //var allH = dic.GetAllHeightsConstruction();
+            //var allW = dic.GetAllWidthConstruction();
+
+            //var row = 1;
+
+            //foreach(var h in allH)
+            //{
+            //    sheet.Cells[row, 1].Value = h.Key;
+            //    sheet.Cells[row, 2].Value = h.Value;
+            //    row++;
+            //}
+
+            //row = 1;
+
+            //foreach(var w in allW)
+            //{
+            //    sheet.Cells[row, 5].Value = w.Key;
+            //    sheet.Cells[row, 6].Value = w.Value;
+            //    row++;
+            //}
+
             var min = dic.GetMinConstruction();
             var max = dic.GetMaxConstruction();
             var mid = dic.GetMidConstruction();
@@ -213,20 +234,20 @@ namespace GKL_Analise
             mod = dic.GetModaConstruction();
             m75 = (List<Gabaryte>)dic.Get75Construction();
 
-            sheet.Cells[27, 14].Value = min.Width;
-            sheet.Cells[27, 15].Value = min.Height;
+            sheet.Cells[27, 2].Value = min.Width;
+            sheet.Cells[27, 3].Value = min.Height;
 
-            sheet.Cells[28, 14].Value = max.Width;
-            sheet.Cells[28, 15].Value = max.Height;
+            sheet.Cells[28, 2].Value = max.Width;
+            sheet.Cells[28, 3].Value = max.Height;
 
-            sheet.Cells[29, 14].Value = mid.Width;
-            sheet.Cells[29, 15].Value = mid.Height;
+            sheet.Cells[29, 2].Value = mid.Width;
+            sheet.Cells[29, 3].Value = mid.Height;
 
-            sheet.Cells[30, 14].Value = mod.Width;
-            sheet.Cells[30, 15].Value = mod.Height;
+            sheet.Cells[30, 2].Value = mod.Width;
+            sheet.Cells[30, 3].Value = mod.Height;
 
-            sheet.Cells[31, 14].Value = $"{m75[0].Width}-{m75[1].Width}";
-            sheet.Cells[31, 15].Value = $"{m75[0].Height}-{m75[1].Height}";
+            sheet.Cells[31, 2].Value = $"{m75[0].Width}-{m75[1].Width}";
+            sheet.Cells[31, 3].Value = $"{m75[0].Height}-{m75[1].Height}";
 
             MessageBox.Show($"Готово");
         }
@@ -294,6 +315,7 @@ namespace GKL_Analise
             }
 
             row++; 
+            row++;
             row++;
 
             sheet.Cells[row, 1].Value = "Фрамуги";
