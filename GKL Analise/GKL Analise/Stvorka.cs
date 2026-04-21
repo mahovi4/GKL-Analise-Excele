@@ -13,13 +13,13 @@ namespace GKL_Analise
 
         public Gabaryte Gabaryte { get; private set; }
 
-        public int VirezSq { get; }
+        public double VirezSq { get; }
 
-        public Stvorka(string name, int square, EGabaryteDirection direction, int delimeter, int virezSq)
+        public Stvorka(string name, double square, EGabaryteDirection direction, int delimeter, double virezSq)
         {
             Name = name;
 
-            var dim = square * 1000000 / delimeter;
+            var dim = (int)(square * 1000000 / delimeter);
             Gabaryte = new Gabaryte(
                 direction == EGabaryteDirection.Height ? delimeter : dim, 
                 direction == EGabaryteDirection.Width ? delimeter : dim);
@@ -27,7 +27,7 @@ namespace GKL_Analise
             VirezSq = virezSq;
         }
 
-        public Stvorka(string name, Gabaryte gabaryte, int virez)
+        public Stvorka(string name, Gabaryte gabaryte, double virez)
         {
             Name = name;
             Gabaryte = gabaryte;
@@ -36,22 +36,22 @@ namespace GKL_Analise
 
         public override string ToString()
         {
-            return $"{Gabaryte} [{VirezSq}]";
+            return $"{Name} - {Gabaryte} [{VirezSq}]";
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return ToString().GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
             if (!(obj is Stvorka stvorka)) return false;
 
-            return stvorka.Gabaryte.Equals(this.Gabaryte) && stvorka.VirezSq == VirezSq;
+            return stvorka.Gabaryte.Equals(Gabaryte) && stvorka.VirezSq.Equals(VirezSq);
         }
 
-        public void setGabaryte(Gabaryte gabaryte)
+        public void SetGabaryte(Gabaryte gabaryte)
         {
             Gabaryte = gabaryte;
         }

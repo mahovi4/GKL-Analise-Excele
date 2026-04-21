@@ -63,27 +63,27 @@ namespace GKL_Analise
 
                 var count = (int)sheet.Cells[rowNum, (int)ColumnsScan.Количество].Value;
 
-                var complexity = (int)sheet.Cells[rowNum, (int)ColumnsScan.Сложность].Value;
+                var complexity = (double)sheet.Cells[rowNum, (int)ColumnsScan.Сложность].Value;
 
-                var sqFram = (int)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьФрамуги].Value;
+                var sqFram = (double)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьФрамуги].Value;
 
-                var sqLVs = (int)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьЛевойБоковойВставки].Value;
+                var sqLVs = (double)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьЛевойБоковойВставки].Value;
 
-                var sqRVs = (int)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьПравойБоковойВставки].Value;
+                var sqRVs = (double)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьПравойБоковойВставки].Value;
 
-                var sqVAS = (int)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьВырезовРабочейСтворки].Value;
+                var sqVAS = (double)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьВырезовРабочейСтворки].Value;
 
-                var sqVPS = (int)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьВырезовПассивнойСтворки].Value;
+                var sqVPS = (double)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьВырезовПассивнойСтворки].Value;
 
-                var sqVFr = (int)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьВырезовФрамуги].Value;
+                var sqVFr = (double)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьВырезовФрамуги].Value;
 
-                var sqVLVs = (int)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьВырезовЛевойБоковойВставки].Value;
+                var sqVLVs = (double)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьВырезовЛевойБоковойВставки].Value;
 
-                var sqVRVs = (int)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьВырезовПравойБоковойВставки].Value;
+                var sqVRVs = (double)sheet.Cells[rowNum, (int)ColumnsScan.ПлощадьВырезовПравойБоковойВставки].Value;
 
                 var pGab = new Gabaryte(height, width);
 
-                var act = new Stvorka("Активная створка", new Gabaryte(has, was), sqVAS);
+                var act = new Stvorka("Активная створка", new Gabaryte(has, was), sqVAS/count);
 
                 Stvorka pas = null;
 
@@ -94,18 +94,18 @@ namespace GKL_Analise
                 Stvorka rv = null;
 
                 if (hps > 0)
-                    pas = new Stvorka("Пассивная створка", new Gabaryte(hps, wps), sqVFr);
+                    pas = new Stvorka("Пассивная створка", new Gabaryte(hps, wps), sqVPS/count);
 
                 if (sqLVs > 0)
-                    lv = new Stvorka("Левая вставка", sqLVs, EGabaryteDirection.Height, height, sqVLVs);
+                    lv = new Stvorka("Левая вставка", sqLVs/count, EGabaryteDirection.Height, height, sqVLVs/count);
 
                 if (sqRVs > 0)
-                    rv = new Stvorka("Правая вставка", sqLVs, EGabaryteDirection.Height, height, sqVRVs);
+                    rv = new Stvorka("Правая вставка", sqRVs/count, EGabaryteDirection.Height, height, sqVRVs/count);
 
                 if (sqFram > 0)
-                    fr = new Stvorka("Фрамуга", sqLVs, EGabaryteDirection.Width, 
+                    fr = new Stvorka("Фрамуга", sqFram/count, EGabaryteDirection.Width, 
                         width + (lv != null ? lv.Gabaryte.Width : 0) + (rv != null ? rv.Gabaryte.Width : 0), 
-                        sqVFr);
+                        sqVFr/count);
 
                 if(wMonth == month)
                 {
@@ -126,35 +126,54 @@ namespace GKL_Analise
             MessageBox.Show($"Готово\nВсего {dates.AllConstructionCount(EConstructionClass.Product)} изделий");
         }
 
+        private void FillTable(_Worksheet sheet, Dictionary<IConstruction, int> dic, int startCol)
+        {
+            var row = 3;
+
+            foreach (var d in dic)
+            {
+                sheet.Cells[row, startCol].Value = d.Key.Gabaryte.Height;
+                sheet.Cells[row, startCol+1].Value = d.Key.Gabaryte.Width;
+                sheet.Cells[row, startCol+2].Value = d.Value;
+                row++;
+            }
+        }
+
         private void bFill1_Click(object sender, RibbonControlEventArgs e)
         {
             var sheet = (_Worksheet)eApp.ActiveSheet;
+
+            //var dAct = dates
+            //    .GetAllConctruction(EConstructionClass.Aktiv)
+            //    .OrderByDescending(kvp => kvp.Value)
+            //    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value); ;
+            //var dPas = dates
+            //    .GetAllConctruction(EConstructionClass.Passiv)
+            //    .OrderByDescending(kvp => kvp.Value)
+            //    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value); ;
+            //var dFr = dates
+            //    .GetAllConctruction(EConstructionClass.Framuga)
+            //    .OrderByDescending(kvp => kvp.Value)
+            //    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value); ;
+            //var dLV = dates
+            //    .GetAllConctruction(EConstructionClass.LVstavka)
+            //    .OrderByDescending(kvp => kvp.Value)
+            //    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value); ;
+            //var dRV = dates
+            //    .GetAllConctruction(EConstructionClass.RVstavka)
+            //    .OrderByDescending(kvp => kvp.Value)
+            //    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value); ;
+
+            //FillTable(sheet, dAct, 1);
+            //FillTable(sheet, dPas, 5);
+            //FillTable(sheet, dFr, 9);
+            //FillTable(sheet, dLV, 13);
+            //FillTable(sheet, dRV, 17);
 
             var d1 = dates.GetAllConctruction(EConstructionClass.Aktiv);
             var d2 = dates.GetAllConctruction(EConstructionClass.Passiv);
 
             var dic = d1.SumDics(d2);
-
-            //var allH = dic.GetAllHeightsConstruction();
-            //var allW = dic.GetAllWidthConstruction();
-
-            //var row = 1;
-
-            //foreach(var h in allH)
-            //{
-            //    sheet.Cells[row, 1].Value = h.Key;
-            //    sheet.Cells[row, 2].Value = h.Value;
-            //    row++;
-            //}
-
-            //row = 1;
-
-            //foreach(var w in allW)
-            //{
-            //    sheet.Cells[row, 5].Value = w.Key;
-            //    sheet.Cells[row, 6].Value = w.Value;
-            //    row++;
-            //}
 
             var min = dic.GetMinConstruction();
             var max = dic.GetMaxConstruction();

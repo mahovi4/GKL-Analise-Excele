@@ -192,7 +192,6 @@
     <Compile Include="Sorter.cs" />
     <Compile Include="RowsFill_1.cs" />
     <Compile Include="Date.cs" />
-    <Compile Include="Framuga.cs" />
     <Compile Include="ColumnsScan.cs" />
     <Compile Include="Stvorka.cs" />
     <Compile Include="Gabaryte.cs" />
@@ -248,10 +247,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>GKL Analise_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>GKL Analise_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>53F54518F239FEDE77AB23C4B9500C4EE6FB1B1F</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>3E195143886B57FBDB07B3AC42DDEA6B85B97AE6</ManifestCertificateThumbprint>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- Include additional build rules for an Office application add-in. -->

@@ -12,7 +12,7 @@ namespace GKL_Analise
 
         public Gabaryte Gabaryte { get; private set; }
 
-        public int Complexity { get; }
+        public double Complexity { get; }
 
         public Stvorka Active { get; }
 
@@ -24,7 +24,7 @@ namespace GKL_Analise
 
         public Stvorka RightVstavka { get; }
 
-        public Product(string name, Gabaryte gabaryte, int complexity, Stvorka active, Stvorka passive, Stvorka framuga, Stvorka leftVstavka, Stvorka rightVstavka)
+        public Product(string name, Gabaryte gabaryte, double complexity, Stvorka active, Stvorka passive, Stvorka framuga, Stvorka leftVstavka, Stvorka rightVstavka)
         {
             Name = name;
             Gabaryte = gabaryte;
@@ -51,7 +51,7 @@ namespace GKL_Analise
 
         public override string ToString()
         {
-            return $"{Name}({Gabaryte.ToString()})";
+            return $"{Name}({Gabaryte})";
         }
 
         public override int GetHashCode()
@@ -87,7 +87,7 @@ namespace GKL_Analise
             return true;
         }
 
-        public void setGabaryte(Gabaryte gabaryte)
+        public void SetGabaryte(Gabaryte gabaryte)
         {
             Gabaryte = gabaryte;
         }

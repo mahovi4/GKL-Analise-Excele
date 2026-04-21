@@ -2,6 +2,6 @@
 {
     internal interface IPolotno : IConstruction
     {
-        int VirezSq { get; }
+        double VirezSq { get; }
     }
 }

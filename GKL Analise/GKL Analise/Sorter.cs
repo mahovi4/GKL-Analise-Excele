@@ -67,9 +67,17 @@ namespace GKL_Analise
 
         public static Dictionary<IConstruction, int> SumDics(this Dictionary<IConstruction, int> dic1, Dictionary<IConstruction, int> dic2)
         {
-            var dic = dic1;
+            var dic = new Dictionary<IConstruction, int>();
 
-            foreach(var p in dic2)
+            foreach(var p in dic1)
+            {
+                if (dic.ContainsKey(p.Key))
+                    dic[p.Key] += p.Value;
+                else
+                    dic.Add(p.Key, p.Value);
+            }
+
+            foreach (var p in dic2)
             {
                 if (dic.ContainsKey(p.Key))
                     dic[p.Key] += p.Value;
@@ -88,7 +96,7 @@ namespace GKL_Analise
             foreach(var d in dic)
             {
                 var el = d.Key;
-                el.setGabaryte(new Gabaryte(d.Key.Gabaryte.Width, d.Key.Gabaryte.Height));
+                el.SetGabaryte(new Gabaryte(d.Key.Gabaryte.Width, d.Key.Gabaryte.Height));
                 res.Add(el, d.Value);
             }
 

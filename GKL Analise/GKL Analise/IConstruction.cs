@@ -12,6 +12,6 @@ namespace GKL_Analise
 
         Gabaryte Gabaryte { get; }
 
-        void setGabaryte(Gabaryte gabaryte);
+        void SetGabaryte(Gabaryte gabaryte);
     }
 }
